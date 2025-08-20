@@ -17,7 +17,7 @@
 	</organization>
 
 	<properties>
-		<sonar.host.url>http://15.206.123.9:2004/</sonar.host.url>
+		<sonar.host.url>http://15.206.123.9:9000/</sonar.host.url>
                 <sonar.token>squ_1e5a34cc24361482daa340f4626b6a35bcd552dd</sonar.token>
 		<jdk.version>1.8</jdk.version>
 		<spring.version>5.1.2.RELEASE</spring.version>
