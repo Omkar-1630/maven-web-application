@@ -1,9 +1,9 @@
-pipeline{
+ pipeline{
           
 		  agent any
 		  
 		  tools {
-		    maven 'maven9.10'
+		    maven 'maven.9.11'
 		    git 'Default'
 		  }
 		  
@@ -11,7 +11,7 @@ pipeline{
 	
 	 stage('gitCheckOut'){
 	  steps{
-	  git branch: 'main', url: 'https://github.com/sanket0101/maven-web-application.git'
+	  git branch: 'main', url: 'https://github.com/Omkar-1630/maven-web-application.git'
 	  }
 	 }
 	
@@ -20,24 +20,24 @@ pipeline{
   sh "mvn clean package"
   }
  }
- 
+    
  stage('sonarAnalysis'){
   steps{
   sh "mvn sonar:sonar"
   }
  }
 	
-	 stage('nexusUpload'){
+    stage('nexusUpload'){
      steps{
      sh "mvn deploy"
      }
     }
-	
+    
     stage('tomcatHosting'){
      steps{
       sshagent(['tomcatkey']) {
         sh """
-  	  scp -o StrictHostKeyChecking=no target/maven-web-application.war ubuntu@3.111.23.119:/opt/apache-tomcat-9.0.107/webapps/
+  	  scp -o StrictHostKeyChecking=no target/maven-web-application.war ubuntu@3.6.91.76:/opt/apache-tomcat-9.0.108/webapps/
   	  """
     }
      }
@@ -45,25 +45,31 @@ pipeline{
 	
 	} //stages closing
 	
-	post {
-	          success {
-	              slackSend (
-	                  color: 'good', // green
-	                  message: "✅ *Build Success* - Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}\n<${env.BUILD_URL}|Click here to view details>"
-	              )
-	          }
-	          failure {
-	              slackSend (
-	                  color: 'danger', // red
-	                  message: "❌ *Build Failed* - Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}\n<${env.BUILD_URL}|Click here to view details>"
-	              )
-	          }
-	          unstable {
-	              slackSend (
-	                  color: 'warning', // yellow
-	                  message: "⚠️ *Build Unstable* - Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}\n<${env.BUILD_URL}|Click here to view details>"
-	              )
-	          }
-	      }  
+ post {
+          success {
+              slackSend (
+                  color: 'good', // green
+                  message: "✅ Build Success - Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}\n<${env.BUILD_URL}|Click here to view details>"
+              )
+          }
+          failure {
+              slackSend (
+                  color: 'danger', // red
+                  message: "❌ Build Failed - Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}\n<${env.BUILD_URL}|Click here to view details>"
+              )
+          }
+          unstable {
+              slackSend (
+                  color: 'warning', // yellow
+                  message: "⚠️ Build Unstable - Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}\n<${env.BUILD_URL}|Click here to view details>"
+              )
+          }
+      }	  
   
   } //pipeline closing
+ 
+
+ 
+ 
+    
+ 
